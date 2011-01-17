@@ -1,0 +1,6 @@
+.svn
+.cvsignore
+CVS
+*.bak
+*~
+BuildLog.htm
