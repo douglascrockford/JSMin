@@ -163,7 +163,29 @@ action(int d)
             putc(theB, stdout);
             for (;;) {
                 theA = get();
-                if (theA == '/') {
+                if (theA == '[') {
+                    /*
+                     * Inside a regex [...] set, which MAY contain a '/' itself.
+                     * Example:
+                     *   mootools Form.Validator near line 460:
+                     *     return Form.Validator.getValidator('IsEmpty').test(element) || (/^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]\.?){0,63}[a-z0-9!#$%&'*+/=?^_`{|}~-]@(?:(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\])$/i).test(element.get('value'));
+                     */
+                    for (;;) {
+                        putc(theA, stdout);
+                        theA = get();
+
+                        if (theA == ']') {
+                            break;
+                        } else if (theA == '\\') {
+                            putc(theA, stdout);
+                            theA = get();
+                        } else if (theA == EOF) {
+                            fprintf(stderr, "Error: JSMIN unterminated Regular Expression set in regex literal.\n");
+                            exit(1);
+                        }
+                    }
+                }
+                else if (theA == '/') {
                     break;
                 }
                 if (theA =='\\') {
