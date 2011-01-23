@@ -1,5 +1,5 @@
 /* jsmin.c
-   2008-08-03
+   2011-01-22
 
 Copyright (c) 2002 Douglas Crockford  (www.crockford.com)
 
@@ -163,16 +163,32 @@ action(int d)
             putc(theB, stdout);
             for (;;) {
                 theA = get();
-                if (theA == '/') {
+                if (theA == '[') {
+                    for (;;) {
+                        putc(theA, stdout);
+                        theA = get();
+                        if (theA == ']') {
+                            break;
+                        } 
+                        if (theA == '\\') {
+                            putc(theA, stdout);
+                            theA = get();
+                        } 
+                        if (theA == EOF) {
+                            fprintf(stderr, 
+                                "Error: JSMIN unterminated set in Regular Expression literal.\n");
+                            exit(1);
+                        }
+                    }
+                } else if (theA == '/') {
                     break;
-                }
-                if (theA =='\\') {
+                } else if (theA =='\\') {
                     putc(theA, stdout);
                     theA = get();
                 }
                 if (theA == EOF) {
                     fprintf(stderr,
-"Error: JSMIN unterminated Regular Expression literal.\n");
+                        "Error: JSMIN unterminated Regular Expression literal.\n");
                     exit(1);
                 }
                 putc(theA, stdout);
