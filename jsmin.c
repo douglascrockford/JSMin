@@ -1,5 +1,5 @@
 /* jsmin.c
-   2011-01-22
+   2011-09-30
 
 Copyright (c) 2002 Douglas Crockford  (www.crockford.com)
 
@@ -135,7 +135,7 @@ action(int d)
         putc(theA, stdout);
     case 2:
         theA = theB;
-        if (theA == '\'' || theA == '"') {
+        if (theA == '\'' || theA == '"' || theA == '`') {
             for (;;) {
                 putc(theA, stdout);
                 theA = get();
@@ -169,13 +169,13 @@ action(int d)
                         theA = get();
                         if (theA == ']') {
                             break;
-                        } 
+                        }
                         if (theA == '\\') {
                             putc(theA, stdout);
                             theA = get();
-                        } 
+                        }
                         if (theA == EOF) {
-                            fprintf(stderr, 
+                            fprintf(stderr,
                                 "Error: JSMIN unterminated set in Regular Expression literal.\n");
                             exit(1);
                         }
@@ -257,6 +257,7 @@ jsmin()
                 case '-':
                 case '"':
                 case '\'':
+                case '`':
                     action(1);
                     break;
                 default:
