@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#include "jsmin/jsmin.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -51,7 +52,7 @@ isAlphanum(int c)
 */
 
 static int
-get()
+get(void)
 {
     int c = theLookahead;
     theLookahead = EOF;
@@ -72,7 +73,7 @@ get()
 */
 
 static int
-peek()
+peek(void)
 {
     theLookahead = get();
     return theLookahead;
@@ -84,7 +85,7 @@ peek()
 */
 
 static int
-next()
+next(void)
 {
     int c = get();
     if  (c == '/') {
@@ -205,8 +206,8 @@ action(int d)
         Most spaces and linefeeds will be removed.
 */
 
-static void
-jsmin()
+void
+jsmin(void)
 {
     theA = '\n';
     action(3);
@@ -274,19 +275,4 @@ jsmin()
             }
         }
     }
-}
-
-
-/* main -- Output any command line arguments as comments
-        and then minify the input.
-*/
-extern int
-main(int argc, char* argv[])
-{
-    int i;
-    for (i = 1; i < argc; i += 1) {
-        fprintf(stdout, "// %s\n", argv[i]);
-    }
-    jsmin();
-    return 0;
 }
