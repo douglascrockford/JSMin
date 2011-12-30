@@ -5,11 +5,13 @@
 lib_LTLIBRARIES = libjsmin.la
 libjsmin_la_SOURCES = libjsmin.c
 libjsmin_la_CPPFLAGS = -I$(top_srcdir)
+
 # program definition
 bin_PROGRAMS = jsmin
 jsmin_SOURCES = jsmin.c
 jsmin_CPPFLAGS = -I$(top_srcdir)
 jsmin_LDADD = libjsmin.la
+
 # install development headers
 pkgincludedir = $(includedir)/jsmin
 pkginclude_HEADERS = jsmin.h
