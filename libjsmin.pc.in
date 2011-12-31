@@ -1,7 +1,7 @@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 libdir=@libdir@
-includedir=@includedir@/jsmin
+includedir=@includedir@
 
 Name: JSMin
 Description: Douglas Crockford's JSMin program
