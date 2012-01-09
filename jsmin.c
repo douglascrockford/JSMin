@@ -1,5 +1,5 @@
 /* jsmin.c
-   2011-09-30
+   2012-01-09
 
 Copyright (c) 2002 Douglas Crockford  (www.crockford.com)
 
@@ -208,6 +208,11 @@ action(int d)
 static void
 jsmin()
 {
+    if (peek() == 0xEF) {
+        get();
+        get();
+        get();
+    }
     theA = '\n';
     action(3);
     while (theA != EOF) {
