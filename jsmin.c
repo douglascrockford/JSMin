@@ -1,5 +1,5 @@
 /* jsmin.c
-   2012-01-09
+   2012-04-15
 
 Copyright (c) 2002 Douglas Crockford  (www.crockford.com)
 
@@ -231,6 +231,8 @@ jsmin()
             case '(':
             case '+':
             case '-':
+            case '!':
+            case '~':
                 action(1);
                 break;
             case ' ':
