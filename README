@@ -4,7 +4,7 @@ JSMIN, The JavaScript Minifier
 Douglas Crockford
 douglas@crockford.com
 
-2003-12-04
+2012-07-02
 
 JSMin is a filter which removes comments and unnecessary whitespace from
 JavaScript files. It typically reduces filesize by half, resulting in faster
@@ -106,25 +106,6 @@ Do not put raw control characters inside a quoted string. That is an extremely
 bad practice. Use \x<i>hh</i> notation instead. JSMin will replace control
 characters with spaces or linefeeds.
 
-Use parens with confusing sequences of + or -. For example, minification changes
-
-    a + ++b
-
-into
-
-    a+++b
-
-which is interpreted as
-
-    a++ + b
-
-which is wrong. You can avoid this by using parens:
-
-    a + (++b)
-
-JSLint checks for all of these problems. It is suggested that JSLint be used
-before using JSMin.
-
 Command Line Options
 
 Optional parameters will be listed at the beginning of the output as comments.
@@ -143,10 +124,6 @@ Unterminated string constant.
 Unterminated regular expression.
 
 It ignores all other errors that may be present in your source program.
-
-Get Minified
-
-You can get a zip file containing an MS-DOS.exe file, or you can get the
-C source code and build it yourself.
+Use of JSLint is strongly recommended.
 
 Copyright 2001 Douglas Crockford. All Rights Reserved Wrrrldwide.
