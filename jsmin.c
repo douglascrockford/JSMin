@@ -1,5 +1,5 @@
 /* jsmin.c
-   2012-07-02
+   2012-11-06
 
 Copyright (c) 2002 Douglas Crockford  (www.crockford.com)
 
@@ -168,11 +168,12 @@ action(int d)
         }
     case 3:
         theB = next();
-        if (theB == '/' && (theA == '(' || theA == ',' || theA == '=' ||
-                            theA == ':' || theA == '[' || theA == '!' ||
-                            theA == '&' || theA == '|' || theA == '?' ||
-                            theA == '{' || theA == '}' || theA == ';' ||
-                            theA == '\n')) {
+        if (theB == '/' && (
+            theA == '(' || theA == ',' || theA == '=' || theA == ':' ||
+            theA == '[' || theA == '!' || theA == '&' || theA == '|' ||
+            theA == '?' || theA == '+' || theA == '-' || theA == '~' ||
+            theA == '*' || theA == '\n'
+        )) {
             putc(theA, stdout);
             putc(theB, stdout);
             for (;;) {
