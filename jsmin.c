@@ -1,5 +1,5 @@
 /* jsmin.c
-   2012-11-06
+   2012-11-18
 
 Copyright (c) 2002 Douglas Crockford  (www.crockford.com)
 
@@ -68,8 +68,6 @@ get()
     theLookahead = EOF;
     if (c == EOF) {
         c = getc(stdin);
-        theY = theX;
-        theX = c;
     }
     if (c >= ' ' || c == '\n' || c == EOF) {
         return c;
@@ -106,9 +104,10 @@ next()
             for (;;) {
                 c = get();
                 if (c <= '\n') {
-                    return c;
+                    break;
                 }
             }
+            break;
         case '*':
             get();
             for (;;) {
@@ -116,17 +115,18 @@ next()
                 case '*':
                     if (peek() == '/') {
                         get();
-                        return ' ';
+                        c = ' ';
                     }
                     break;
                 case EOF:
                     error("Unterminated comment.");
                 }
             }
-        default:
-            return c;
+            break;
         }
     }
+    theY = theX;
+    theX = c;
     return c;
 }
 
@@ -142,11 +142,16 @@ next()
 static void
 action(int d)
 {
+    int p;
     switch (d) {
     case 1:
         putc(theA, stdout);
-        if (theA == theB && (theA == '+' || theA == '-') && theY != theA) {
-            putc(' ', stdout);
+        if (
+            (theY == '\n' || theY == ' ') &&
+            (theA == '+' || theA == '-' || theA == '*' || theA == '/') &&
+            (theB == '+' || theB == '-' || theB == '*' || theB == '/')
+        ) {
+            putc(theY, stdout);
         }
     case 2:
         theA = theB;
@@ -172,9 +177,12 @@ action(int d)
             theA == '(' || theA == ',' || theA == '=' || theA == ':' ||
             theA == '[' || theA == '!' || theA == '&' || theA == '|' ||
             theA == '?' || theA == '+' || theA == '-' || theA == '~' ||
-            theA == '*' || theA == '\n'
+            theA == '*' || theA == '/' || theA == '\n'
         )) {
             putc(theA, stdout);
+            if (theA == '/' || theA == '*') {
+                putc(' ', stdout);
+            }
             putc(theB, stdout);
             for (;;) {
                 theA = get();
@@ -194,6 +202,11 @@ action(int d)
                         }
                     }
                 } else if (theA == '/') {
+                    switch (peek()) {
+                    case '/':
+                    case '*':
+                        error("Unterminated set in Regular Expression literal.");
+                    }
                     break;
                 } else if (theA =='\\') {
                     putc(theA, stdout);
@@ -229,11 +242,7 @@ jsmin()
     while (theA != EOF) {
         switch (theA) {
         case ' ':
-            if (isAlphanum(theB)) {
-                action(1);
-            } else {
-                action(2);
-            }
+            action(isAlphanum(theB) ? 1 : 2);
             break;
         case '\n':
             switch (theB) {
@@ -250,21 +259,13 @@ jsmin()
                 action(3);
                 break;
             default:
-                if (isAlphanum(theB)) {
-                    action(1);
-                } else {
-                    action(2);
-                }
+                action(isAlphanum(theB) ? 1 : 2);
             }
             break;
         default:
             switch (theB) {
             case ' ':
-                if (isAlphanum(theA)) {
-                    action(1);
-                    break;
-                }
-                action(3);
+                action(isAlphanum(theA) ? 1 : 3);
                 break;
             case '\n':
                 switch (theA) {
@@ -279,11 +280,7 @@ jsmin()
                     action(1);
                     break;
                 default:
-                    if (isAlphanum(theA)) {
-                        action(1);
-                    } else {
-                        action(3);
-                    }
+                    action(isAlphanum(theA) ? 1 : 3);
                 }
                 break;
             default:
