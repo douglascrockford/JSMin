@@ -110,7 +110,7 @@ next()
             break;
         case '*':
             get();
-            for (;;) {
+            while (c != ' ') {
                 switch (get()) {
                 case '*':
                     if (peek() == '/') {
