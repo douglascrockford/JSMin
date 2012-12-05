@@ -1,5 +1,5 @@
 /* jsmin.c
-   2012-11-18
+   2012-12-04
 
 Copyright (c) 2002 Douglas Crockford  (www.crockford.com)
 
@@ -110,7 +110,7 @@ next()
             break;
         case '*':
             get();
-            for (;;) {
+            while (c != ' ') {
                 switch (get()) {
                 case '*':
                     if (peek() == '/') {
