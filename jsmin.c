@@ -142,7 +142,6 @@ next()
 static void
 action(int d)
 {
-    int p;
     switch (d) {
     case 1:
         putc(theA, stdout);
