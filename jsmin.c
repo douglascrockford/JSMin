@@ -1,5 +1,5 @@
 /* jsmin.c
-   2012-12-04
+   2013-02-25
 
 Copyright (c) 2002 Douglas Crockford  (www.crockford.com)
 
@@ -142,7 +142,6 @@ next()
 static void
 action(int d)
 {
-    int p;
     switch (d) {
     case 1:
         putc(theA, stdout);
