@@ -1,5 +1,5 @@
 /* jsmin.c
-   2013-02-25
+   2013-03-29
 
 Copyright (c) 2002 Douglas Crockford  (www.crockford.com)
 
@@ -176,7 +176,7 @@ action(int d)
             theA == '(' || theA == ',' || theA == '=' || theA == ':' ||
             theA == '[' || theA == '!' || theA == '&' || theA == '|' ||
             theA == '?' || theA == '+' || theA == '-' || theA == '~' ||
-            theA == '*' || theA == '/' || theA == '\n'
+            theA == '*' || theA == '/' || theA == '{' || theA == '\n'
         )) {
             putc(theA, stdout);
             if (theA == '/' || theA == '*') {
