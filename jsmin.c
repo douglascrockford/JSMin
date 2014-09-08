@@ -26,6 +26,7 @@ SOFTWARE.
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 static int   theA;
 static int   theB;
@@ -55,21 +56,28 @@ isAlphanum(int c)
         c > 126);
 }
 
-
 /* get -- return the next character from stdin. Watch out for lookahead. If
         the character is a control character, translate it to a space or
         linefeed.
 */
 
+
+/* get -- return the next character from stdin. Watch out for lookahead. If
+        the character is a control character, translate it to a space or
+        linefeed.
+        if JSMin is handling a String literal, it will not replace the '\t' character
+*/
+
 static int
-get()
+get(bool isInStringLiteral)
 {
     int c = theLookahead;
     theLookahead = EOF;
     if (c == EOF) {
         c = getc(stdin);
     }
-    if (c >= ' ' || c == '\n' || c == EOF) {
+
+    if (c >= ' ' || c == '\n' || c == EOF || (isInStringLiteral == true && c == '\t')) {
         return c;
     }
     if (c == '\r') {
@@ -85,7 +93,7 @@ get()
 static int
 peek()
 {
-    theLookahead = get();
+    theLookahead = get(false);
     return theLookahead;
 }
 
@@ -97,24 +105,24 @@ peek()
 static int
 next()
 {
-    int c = get();
+    int c = get(false);
     if  (c == '/') {
         switch (peek()) {
         case '/':
             for (;;) {
-                c = get();
+                c = get(false);
                 if (c <= '\n') {
                     break;
                 }
             }
             break;
         case '*':
-            get();
+            get(false);
             while (c != ' ') {
-                switch (get()) {
+                switch (get(false)) {
                 case '*':
                     if (peek() == '/') {
-                        get();
+                        get(false);
                         c = ' ';
                     }
                     break;
@@ -157,13 +165,13 @@ action(int d)
         if (theA == '\'' || theA == '"' || theA == '`') {
             for (;;) {
                 putc(theA, stdout);
-                theA = get();
+                theA = get(true);
                 if (theA == theB) {
                     break;
                 }
                 if (theA == '\\') {
                     putc(theA, stdout);
-                    theA = get();
+                    theA = get(true);
                 }
                 if (theA == EOF) {
                     error("Unterminated string literal.");
@@ -184,17 +192,17 @@ action(int d)
             }
             putc(theB, stdout);
             for (;;) {
-                theA = get();
+                theA = get(false);
                 if (theA == '[') {
                     for (;;) {
                         putc(theA, stdout);
-                        theA = get();
+                        theA = get(false);
                         if (theA == ']') {
                             break;
                         }
                         if (theA == '\\') {
                             putc(theA, stdout);
-                            theA = get();
+                            theA = get(false);
                         }
                         if (theA == EOF) {
                             error("Unterminated set in Regular Expression literal.");
@@ -209,7 +217,7 @@ action(int d)
                     break;
                 } else if (theA =='\\') {
                     putc(theA, stdout);
-                    theA = get();
+                    theA = get(false);
                 }
                 if (theA == EOF) {
                     error("Unterminated Regular Expression literal.");
@@ -232,9 +240,9 @@ static void
 jsmin()
 {
     if (peek() == 0xEF) {
-        get();
-        get();
-        get();
+        get(false);
+        get(false);
+        get(false);
     }
     theA = '\n';
     action(3);
