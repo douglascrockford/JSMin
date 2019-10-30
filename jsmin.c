@@ -1,5 +1,5 @@
 /* jsmin.c
-   2013-03-29
+   2019-10-30
 
 Copyright (c) 2002 Douglas Crockford  (www.crockford.com)
 
@@ -50,9 +50,15 @@ error(char* s)
 static int
 isAlphanum(int c)
 {
-    return ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') ||
-        (c >= 'A' && c <= 'Z') || c == '_' || c == '$' || c == '\\' ||
-        c > 126);
+    return (
+        (c >= 'a' && c <= 'z')
+        || (c >= '0' && c <= '9')
+        || (c >= 'A' && c <= 'Z')
+        || c == '_'
+        || c == '$'
+        || c == '\\'
+        || c > 126
+    );
 }
 
 
@@ -146,9 +152,9 @@ action(int d)
     case 1:
         putc(theA, stdout);
         if (
-            (theY == '\n' || theY == ' ') &&
-            (theA == '+' || theA == '-' || theA == '*' || theA == '/') &&
-            (theB == '+' || theB == '-' || theB == '*' || theB == '/')
+            (theY == '\n' || theY == ' ')
+            && (theA == '+' || theA == '-' || theA == '*' || theA == '/')
+            && (theB == '+' || theB == '-' || theB == '*' || theB == '/')
         ) {
             putc(theY, stdout);
         }
@@ -173,10 +179,11 @@ action(int d)
     case 3:
         theB = next();
         if (theB == '/' && (
-            theA == '(' || theA == ',' || theA == '=' || theA == ':' ||
-            theA == '[' || theA == '!' || theA == '&' || theA == '|' ||
-            theA == '?' || theA == '+' || theA == '-' || theA == '~' ||
-            theA == '*' || theA == '/' || theA == '{' || theA == '\n'
+            theA == '(' || theA == ',' || theA == '=' || theA == ':'
+            || theA == '[' || theA == '!' || theA == '&' || theA == '|'
+            || theA == '?' || theA == '+' || theA == '-' || theA == '~'
+            || theA == '*' || theA == '/' || theA == '{' || theA == '}'
+            || theA == ';' || theA == '\n'
         )) {
             putc(theA, stdout);
             if (theA == '/' || theA == '*') {
