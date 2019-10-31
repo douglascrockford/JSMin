@@ -172,7 +172,7 @@ static void action(int determined) {
             || the_a == '[' || the_a == '!' || the_a == '&' || the_a == '|'
             || the_a == '?' || the_a == '+' || the_a == '-' || the_a == '~'
             || the_a == '*' || the_a == '/' || the_a == '{' || the_a == '}'
-            || the_a == ';' || the_a == '\n'
+            || the_a == ';'
         )) {
             putc(the_a, stdout);
             if (the_a == '/' || the_a == '*') {
