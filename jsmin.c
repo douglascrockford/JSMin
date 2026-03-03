@@ -1,5 +1,5 @@
 /* jsmin.c
-   2026-02-25
+   2026-03-03
 
 Copyright (C) 2002 Douglas Crockford  (www.crockford.com)
 
@@ -172,7 +172,7 @@ static void action(int determined) {
             || the_a == '[' || the_a == '!' || the_a == '&' || the_a == '|'
             || the_a == '?' || the_a == '+' || the_a == '-' || the_a == '~'
             || the_a == '*' || the_a == '/' || the_a == '{' || the_a == '}'
-            || the_a == ';' || the_a == '\n'
+            || the_a == ';'
         )) {
             putc(the_a, stdout);
             if (the_a == '/' || the_a == '*') {
